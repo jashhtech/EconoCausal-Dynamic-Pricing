@@ -1,0 +1,36 @@
+column_name,data_type,description
+ID,int64,Unique customer identifier
+Year_Birth,int64,Customer birth year
+Education,str,Customer education level
+Marital_Status,str,Customer marital status
+Income,float64,Customer yearly income
+Kidhome,int64,Number of children in household
+Teenhome,int64,Number of teenagers in household
+Dt_Customer,str,Date when customer became a customer
+Recency,int64,Number of days since last purchase
+MntWines,int64,Amount spent on wine products
+MntFruits,int64,Amount spent on fruit products
+MntMeatProducts,int64,Amount spent on meat products
+MntFishProducts,int64,Amount spent on fish products
+MntSweetProducts,int64,Amount spent on sweet products
+MntGoldProds,int64,Amount spent on gold products
+NumDealsPurchases,int64,Number of purchases made with deals
+NumWebPurchases,int64,Number of purchases made through the web
+NumCatalogPurchases,int64,Number of purchases made through the catalog
+NumStorePurchases,int64,Number of purchases made in stores
+NumWebVisitsMonth,int64,Number of web visits per month
+AcceptedCmp3,int64,Accepted campaign 3
+AcceptedCmp4,int64,Accepted campaign 4
+AcceptedCmp5,int64,Accepted campaign 5
+AcceptedCmp1,int64,Accepted campaign 1
+AcceptedCmp2,int64,Accepted campaign 2
+Complain,int64,Customer complaint indicator
+Z_CostContact,int64,Campaign contact cost value
+Z_Revenue,int64,Campaign revenue value
+Response,int64,Response to the latest campaign
+age,int64,Customer age
+total_purchase_amount,int64,Total amount spent across products
+total_purchases,int64,Total number of purchases across channels
+deal_purchase_indicator,int64,Indicator for purchases made with deals
+campaign_exposure,int64,Indicator for previous campaign exposure
+campaign_response,int64,Campaign response outcome
