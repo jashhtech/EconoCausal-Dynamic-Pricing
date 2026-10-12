@@ -92,3 +92,33 @@ h1, h2 {
 .sidebar h2 {
   color: #ffffff;
 }
+.file-info {
+  margin: 16px 0;
+  color: #374151;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.preview-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.preview-table th,
+.preview-table td {
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+  white-space: nowrap;
+}
+
+.preview-table th {
+  background: #f3f4f6;
+  color: #1f2937;
+}
