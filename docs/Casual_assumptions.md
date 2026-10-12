@@ -28,3 +28,14 @@ effect estimation; it does not prove that the relationships are true.
   may not be appropriate.
 - Do not claim this DAG proves causation. The quality of causal estimates depends on
   assumptions and data quality.
+
+  ## Next Steps
+
+1. Confirm the proposed variables and relationships with the project team.
+2. Check the actual dataset column names before building the causal model.
+3. Use DoWhy to define the treatment, outcome, and potential confounders.
+4. In Week 2, estimate discount treatment effects using Double Machine Learning (DML), if the data and assumptions support it.
+
+## Conclusion
+
+This causal DAG provides an initial structure for understanding the relationship between customer history, discount assignment, and purchase behavior. It represents proposed assumptions, not proven causal relationships.
