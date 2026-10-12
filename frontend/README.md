@@ -1,16 +1,37 @@
-# React + Vite
+# EconoCausal Dashboard (Frontend)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React dashboard for **EconoCausal: Dynamic Pricing via Double Machine Learning**.
+Built by Vridhi Gautam (branch: `vridhi-gautam`).
 
-Currently, two official plugins are available:
+## Purpose
+The marketing director uploads historical campaign data, sets a discount budget,
+and (in later weeks) sees uplift curves and the optimal discount per customer.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Tech stack
+- React (Vite, JavaScript)
+- PapaParse (CSV parsing, Week 1)
+- Plotly.js (uplift/Qini curves, Week 2)
 
-## React Compiler
+## Week 1 scope (Dashboard Scaffolding)
+- [x] React app setup with Vite
+- [x] Dashboard layout: sidebar, header, page switching
+- [ ] Historical campaign data upload (CSV) with preview table
+- [ ] Column validation with clear error messages
+- [ ] Budget input (default 5000, no negative or empty values)
+- [ ] Split into components (Sidebar, CsvUpload, DataPreview, BudgetInput)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Planned CSV schema (to be confirmed with the data teammate)
+customer_id, age, past_spend, visits_per_month, tenure_months,
+region, discount_given, purchased
 
-## Expanding the ESLint configuration
+## Roadmap
+- Week 2: Plotly Qini and uplift curves, filter thousands of ITE scores
+- Week 3: Allocation matrix (customer and optimal discount)
+- Week 4: Natural-language summaries, connect to REST API
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Run locally
+1. Install Node.js
+2. `cd frontend`
+3. `npm install`
+4. `npm run dev`
+5. Open http://localhost:5173
