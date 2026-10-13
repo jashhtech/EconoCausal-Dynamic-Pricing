@@ -293,3 +293,17 @@ importance = importance.sort_values(
 print("\n--- Feature Importance ---")
 print(importance.to_string(index=False))
 
+
+# Examine feature importance from the trained Decision Tree
+importance = pd.DataFrame({
+    "Feature": X.columns,
+    "Importance": model.feature_importances_
+})
+
+importance = importance.sort_values(
+    by="Importance",
+    ascending=False
+)
+
+print("\n--- Feature Importance ---")
+print(importance.to_string(index=False))

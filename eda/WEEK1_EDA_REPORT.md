@@ -87,3 +87,15 @@ The current dataset includes deal-purchase counts but does not provide actual di
 ## 8. Conclusion
 
 Week 1 established an understanding of the dataset, checked data quality, validated important derived columns, identified candidate Machine Learning features, and prepared training and testing datasets. This work provides a foundation for subsequent modeling and causal analysis in the EconoCausal-Dynamic-Pricing project.
+### Feature Importance Analysis
+
+A Decision Tree classifier was used to examine the relative importance of the selected input features when predicting campaign response.
+
+The three highest-ranked features were:
+1. **NumCatalogPurchases:** 26.35%
+2. **Recency:** 20.77%
+3. **Income:** 18.83%
+
+`NumWebVisitsMonth` ranked fourth at 12.73%. `NumDealsPurchases` and `NumWebPurchases` had relatively low importance in this baseline model.
+
+These values indicate how the trained Decision Tree used each feature to make predictions. They do not establish causal relationships. The findings can help guide future analysis, but they should be validated before informing pricing or marketing decisions.
