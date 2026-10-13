@@ -3,13 +3,13 @@ import pandas as pd
 # Load cleaned dataset
 df = pd.read_csv("retail_data.csv")
 
-# Basic quality checks
+# Basic qaulity checks 
 quality_report = {
     "Rows": len(df),
-    "Columns": len(df.columns),
-    "Missing values": df.isnull().sum().sum(),
-    "Duplicate rows": df.duplicated().sum()
-}
+    "columns":len(df.columns),
+    "missing values": df.isnull().sum().sum(),
+    "duplicate rows": df.duplicated().sum() 
+    }
 
 # Display quality report
 print("DATA QUALITY REPORT")
