@@ -307,3 +307,23 @@ importance = importance.sort_values(
 
 print("\n--- Feature Importance ---")
 print(importance.to_string(index=False))
+
+
+
+# 11. Customer age distribution
+print("\n--- Customer Age Distribution ---")
+
+print("Average age:", round(df["age"].mean(), 2))
+print("Median age:", df["age"].median())
+print("Youngest customer:", df["age"].min())
+print("Oldest customer:", df["age"].max())
+
+print("\nAge group counts:")
+age_groups = pd.cut(
+    df["age"],
+    bins=[0, 30, 40, 50, 60, 100],
+    labels=["Under 30", "30-39", "40-49", "50-59", "60+"],
+    right=False
+)
+
+print(age_groups.value_counts().sort_index())

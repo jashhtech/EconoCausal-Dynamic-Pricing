@@ -99,3 +99,20 @@ The three highest-ranked features were:
 `NumWebVisitsMonth` ranked fourth at 12.73%. `NumDealsPurchases` and `NumWebPurchases` had relatively low importance in this baseline model.
 
 These values indicate how the trained Decision Tree used each feature to make predictions. They do not establish causal relationships. The findings can help guide future analysis, but they should be validated before informing pricing or marketing decisions.
+
+
+### Customer Age Distribution
+
+As part of the exploratory data analysis, customer ages were examined to understand the age profile of the dataset.
+
+The analysis calculates:
+- Average customer age
+- Median customer age
+- Minimum and maximum customer ages
+- Number of customers in different age groups
+
+Customers are grouped into five categories: under 30, 30–39, 40–49, 50–59, and 60 years or older.
+
+This analysis helps us understand the age distribution of customers and provides an overview of the dataset before further modeling.
+
+**Results:** The numerical results and age-group counts will be added after running the updated EDA script.
