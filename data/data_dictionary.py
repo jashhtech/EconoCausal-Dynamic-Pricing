@@ -42,7 +42,7 @@ data_dictionary = pd.DataFrame({
         "Total number of purchases across channels",
         "Indicator for purchases made with deals",
         "Indicator for previous campaign exposure",
-        "Campaign response outcome"
+        "Campaign response outcome"   
     ]
 })
 
@@ -51,3 +51,4 @@ data_dictionary.to_csv("data_dictionary.csv", index=False)
 
 print("Data dictionary created successfully.")
 print("Columns documented:", len(data_dictionary))
+
