@@ -17,6 +17,9 @@ function App() {
   const [rows, setRows] = useState([])
   const [columns, setColumns] = useState([])
   const [error, setError] = useState('')
+  const [budget, setBudget] = useState('5000')
+  const [budgetError, setBudgetError] = useState('')
+  const [savedBudget, setSavedBudget] = useState(null)
 
     function handleFileChange(event) {
     const file = event.target.files[0]
@@ -43,6 +46,21 @@ function App() {
         setColumns(fields)
       },
     })
+  }
+    function handleSaveBudget() {
+    const value = Number(budget)
+
+    if (budget.trim() === '' || Number.isNaN(value)) {
+      setBudgetError('Please enter a budget amount.')
+      return
+    }
+    if (value <= 0) {
+      setBudgetError('Budget must be greater than 0.')
+      return
+    }
+
+    setBudgetError('')
+    setSavedBudget(value)
   }
   return (
     <div className="layout">
@@ -105,7 +123,35 @@ function App() {
               )}
             </div>
           )}
-          {page === 'budget' && <h2>Set Budget page</h2>}
+          {page === 'budget' && (
+  <div>
+    <h2>Set Marketing Budget</h2>
+
+    <div className="budget-card">
+      <label htmlFor="budget">Total budget ($)</label>
+      <input
+        id="budget"
+        type="number"
+        className="budget-input"
+        value={budget}
+        onChange={(e) => setBudget(e.target.value)}
+      />
+      <p className="hint">Discount options: $10 and $20</p>
+      <button className="save-btn" onClick={handleSaveBudget}>
+        Save Budget
+      </button>
+      {budgetError && <p className="error-box">{budgetError}</p>}
+    </div>
+
+    {savedBudget !== null && (
+      <div className="summary-card">
+        <strong>Budget: ${savedBudget.toLocaleString()}</strong>
+        {' | '}
+        Customers uploaded: <strong>{rows.length}</strong>
+      </div>
+    )}
+  </div>
+)}
         </div>
       </div>
     </div>

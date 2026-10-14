@@ -17,7 +17,7 @@ and (in later weeks) sees uplift curves and the optimal discount per customer.
 - [x] Dashboard layout: sidebar, header, page switching
 - [x] Historical campaign data upload (CSV) with preview table
 - [x] Column validation with clear error messages
-- [ ] Budget input (default 5000, no negative or empty values)
+- [x] Budget input (default 5000, no negative or empty values)
 - [ ] Split into components (Sidebar, CsvUpload, DataPreview, BudgetInput)
 
 ## Planned CSV schema (to be confirmed with the data teammate)

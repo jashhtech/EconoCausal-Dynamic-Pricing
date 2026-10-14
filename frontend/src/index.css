@@ -130,3 +130,49 @@ h1, h2 {
   border-radius: 8px;
   color: #b91c1c;
 }
+.budget-card {
+  max-width: 420px;
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.budget-card label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.budget-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+.hint {
+  margin: 10px 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.save-btn {
+  padding: 10px 18px;
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.summary-card {
+  max-width: 420px;
+  margin-top: 20px;
+  padding: 16px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+}
