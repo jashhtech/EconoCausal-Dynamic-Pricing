@@ -15,8 +15,8 @@ and (in later weeks) sees uplift curves and the optimal discount per customer.
 ## Week 1 scope (Dashboard Scaffolding)
 - [x] React app setup with Vite
 - [x] Dashboard layout: sidebar, header, page switching
-- [ ] Historical campaign data upload (CSV) with preview table
-- [ ] Column validation with clear error messages
+- [x] Historical campaign data upload (CSV) with preview table
+- [x] Column validation with clear error messages
 - [ ] Budget input (default 5000, no negative or empty values)
 - [ ] Split into components (Sidebar, CsvUpload, DataPreview, BudgetInput)
 
@@ -34,4 +34,3 @@ region, discount_given, purchased
 2. `cd frontend`
 3. `npm install`
 4. `npm run dev`
-5. Open http://localhost:5173

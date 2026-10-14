@@ -1,28 +1,49 @@
 import { useState } from 'react'
 import Papa from 'papaparse'
+const REQUIRED_COLUMNS = [
+  'customer_id',
+  'age',
+  'past_spend',
+  'visits_per_month',
+  'tenure_months',
+  'region',
+  'discount_given',
+  'purchased',
+]
 
 function App() {
   const [page, setPage] = useState('upload')
   const [fileName, setFileName] = useState('')
   const [rows, setRows] = useState([])
   const [columns, setColumns] = useState([])
+  const [error, setError] = useState('')
 
-  function handleFileChange(event) {
+    function handleFileChange(event) {
     const file = event.target.files[0]
     if (!file) return
 
     setFileName(file.name)
+    setError('')
+    setRows([])
+    setColumns([])
 
     Papa.parse(file, {
       header: true,
       skipEmptyLines: true,
       complete: (result) => {
+        const fields = result.meta.fields
+        const missing = REQUIRED_COLUMNS.filter((col) => !fields.includes(col))
+
+        if (missing.length > 0) {
+          setError('Missing required columns: ' + missing.join(', '))
+          return
+        }
+
         setRows(result.data)
-        setColumns(result.meta.fields)
+        setColumns(fields)
       },
     })
   }
-
   return (
     <div className="layout">
       <div className="sidebar">
@@ -53,8 +74,8 @@ function App() {
             <div>
               <h2>Upload Historical Campaign Data</h2>
               <input type="file" accept=".csv" onChange={handleFileChange} />
-
-              {fileName && (
+              {error && <p className="error-box">{error}</p>}
+                {fileName && !error && (
                 <p className="file-info">
                   File: <strong>{fileName}</strong> | Rows: <strong>{rows.length}</strong> | Columns: <strong>{columns.length}</strong>
                 </p>
