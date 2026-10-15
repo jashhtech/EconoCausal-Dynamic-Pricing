@@ -55,6 +55,7 @@ campaign_columns = [
     "AcceptedCmp3",
     "AcceptedCmp4",
     "AcceptedCmp5"
+    
 ]
 
 df["campaign_exposure"] = (
