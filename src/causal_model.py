@@ -11,6 +11,15 @@ digraph {
 }
 """
 
-print("Causal graph defined successfully!")
+# Check that DoWhy can parse the graph
+model = CausalModel(
+    data=None,
+    treatment="DiscountReceived",
+    outcome="Purchase",
+    graph=causal_graph
+)
 
-print(causal_graph)
+print("Causal graph definition created successfully!")
+print("\nTreatment: DiscountReceived")
+print("Outcome: Purchase")
+print("Potential confounders: PastPurchases, PastSpending")

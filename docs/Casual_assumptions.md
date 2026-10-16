@@ -54,3 +54,21 @@ proposed assumptions, not proven causal relationships.
 - The treatment and outcome variables must be mapped to the actual dataset columns.
 - The meaning of the discount-related variable must be confirmed before causal analysis.
 - The graph has not yet been validated using data.
+
+## Week 1 Final Review
+
+### Treatment
+DiscountReceived
+
+### Outcome
+Purchase
+
+### Potential Confounders
+- PastPurchases
+- PastSpending
+
+### Assumptions and Limitations
+- The causal relationships are preliminary assumptions.
+- The actual dataset has not yet been integrated into this branch.
+- The treatment, outcome, and confounders must be validated against the dataset.
+- Causal effect estimation will be performed after data integration.
