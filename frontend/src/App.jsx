@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Papa from 'papaparse'
 import Sidebar from './components/Sidebar'
 import BudgetInput from './components/BudgetInput'
+import DataPreview from './components/DataPreview'
 const REQUIRED_COLUMNS = [
   'customer_id',
   'age',
@@ -86,26 +87,7 @@ function App() {
               )}
 
               {rows.length > 0 && (
-                <div className="table-wrapper">
-                  <table className="preview-table">
-                    <thead>
-                      <tr>
-                        {columns.map((col) => (
-                          <th key={col}>{col}</th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {rows.slice(0, 10).map((row, index) => (
-                        <tr key={index}>
-                          {columns.map((col) => (
-                            <td key={col}>{row[col]}</td>
-                          ))}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                <DataPreview columns={columns} rows={rows} />
               )}
             </div>
           )}
