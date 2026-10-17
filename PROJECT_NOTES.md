@@ -56,6 +56,3 @@ Estimating how the expected purchase behavior may change under different discoun
 * How can businesses use causal estimates to improve promotional decisions?
 * How can we evaluate whether the model's estimates are reliable?
 
-## 7. Future Updates
-
-This file will be updated as the project progresses, including new concepts learned, implementation decisions, challenges, and solutions.
