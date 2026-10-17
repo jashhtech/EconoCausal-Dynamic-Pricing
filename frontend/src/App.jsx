@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Papa from 'papaparse'
 import Sidebar from './components/Sidebar'
+import BudgetInput from './components/BudgetInput'
 const REQUIRED_COLUMNS = [
   'customer_id',
   'age',
@@ -109,33 +110,14 @@ function App() {
             </div>
           )}
           {page === 'budget' && (
-  <div>
-    <h2>Set Marketing Budget</h2>
-
-    <div className="budget-card">
-      <label htmlFor="budget">Total budget ($)</label>
-      <input
-        id="budget"
-        type="number"
-        className="budget-input"
-        value={budget}
-        onChange={(e) => setBudget(e.target.value)}
-      />
-      <p className="hint">Discount options: $10 and $20</p>
-      <button className="save-btn" onClick={handleSaveBudget}>
-        Save Budget
-      </button>
-      {budgetError && <p className="error-box">{budgetError}</p>}
-    </div>
-
-    {savedBudget !== null && (
-      <div className="summary-card">
-        <strong>Budget: ${savedBudget.toLocaleString()}</strong>
-        {' | '}
-        Customers uploaded: <strong>{rows.length}</strong>
-      </div>
-    )}
-  </div>
+  <BudgetInput
+    budget={budget}
+    setBudget={setBudget}
+    budgetError={budgetError}
+    savedBudget={savedBudget}
+    onSave={handleSaveBudget}
+    customerCount={rows.length}
+  />
 )}
         </div>
       </div>
