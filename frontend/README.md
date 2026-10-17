@@ -18,7 +18,7 @@ and (in later weeks) sees uplift curves and the optimal discount per customer.
 - [x] Historical campaign data upload (CSV) with preview table
 - [x] Column validation with clear error messages
 - [x] Budget input (default 5000, no negative or empty values)
-- [ ] Split into components (Sidebar, CsvUpload, DataPreview, BudgetInput)
+- [x] Split into components (Sidebar, CsvUpload, DataPreview, BudgetInput)
 
 ## Planned CSV schema (to be confirmed with the data teammate)
 customer_id, age, past_spend, visits_per_month, tenure_months,
