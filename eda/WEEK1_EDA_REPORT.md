@@ -116,3 +116,27 @@ Customers are grouped into five categories: under 30, 30–39, 40–49, 50–59,
 This analysis helps us understand the age distribution of customers and provides an overview of the dataset before further modeling.
 
 **Results:** The numerical results and age-group counts will be added after running the updated EDA script.
+
+
+
+
+The customer age analysis showed the following results:
+
+- **Average age:** 56.1 years
+- **Median age:** 55 years
+- **Youngest customer:** 29 years
+- **Oldest customer:** 85 years
+
+**Age group distribution:**
+
+| Age group | Number of customers |
+|---|---:|
+| Under 30 | 2 |
+| 30–39 | 187 |
+| 40–49 | 506 |
+| 50–59 | 685 |
+| 60 and above | 857 |
+
+The largest age group is 60 and above, with 857 customers. The dataset contains relatively few customers under 30. This analysis helps describe the age profile of the customers included in the dataset.
+
+These findings are descriptive and do not establish that age causes a customer to respond to a marketing campaign.
