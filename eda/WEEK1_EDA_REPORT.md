@@ -84,9 +84,7 @@ The model identified 46 actual responders but also incorrectly predicted that 11
 
 The current dataset includes deal-purchase counts but does not provide actual discount percentages or product-level price histories. Therefore, it cannot by itself establish the causal effect of discounts on purchases.
 
-## 8. Conclusion
 
-Week 1 established an understanding of the dataset, checked data quality, validated important derived columns, identified candidate Machine Learning features, and prepared training and testing datasets. This work provides a foundation for subsequent modeling and causal analysis in the EconoCausal-Dynamic-Pricing project.
 ### Feature Importance Analysis
 
 A Decision Tree classifier was used to examine the relative importance of the selected input features when predicting campaign response.
@@ -115,7 +113,7 @@ Customers are grouped into five categories: under 30, 30–39, 40–49, 50–59,
 
 This analysis helps us understand the age distribution of customers and provides an overview of the dataset before further modeling.
 
-**Results:** The numerical results and age-group counts will be added after running the updated EDA script.
+
 
 
 
@@ -140,3 +138,7 @@ The customer age analysis showed the following results:
 The largest age group is 60 and above, with 857 customers. The dataset contains relatively few customers under 30. This analysis helps describe the age profile of the customers included in the dataset.
 
 These findings are descriptive and do not establish that age causes a customer to respond to a marketing campaign.
+
+## 8. Conclusion
+
+Week 1 established an understanding of the dataset, checked data quality, validated important derived columns, identified candidate Machine Learning features, and prepared training and testing datasets. This work provides a foundation for subsequent modeling and causal analysis in the EconoCausal-Dynamic-Pricing project.
