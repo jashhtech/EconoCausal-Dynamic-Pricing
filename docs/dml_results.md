@@ -110,3 +110,14 @@ A DML estimate does not establish causality by itself. Its interpretation depend
 
 
 
+
+
+## Week 2 Progress — October 21, 2026
+
+- Created the initial DML estimation module with cross-fitting and treatment-effect uncertainty estimation.
+- Added documentation covering the planned method, evaluation steps, and current limitations.
+- Reviewed the team's feature engineering and DML implementations to identify integration requirements.
+- Identified a mismatch between the feature names in the feature engineering code and the shared retail dataset.
+- Pending confirmation of the treatment, outcome, and confounder variables before running causal estimation.
+
+**Status:** Initial implementation committed and pushed. Team integration and validation are in progress.
