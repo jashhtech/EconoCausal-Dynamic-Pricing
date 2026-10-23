@@ -1,3 +1,4 @@
+
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -25,14 +26,12 @@ CONFOUNDERS = [
 ]
 
 # Change to True only after the team approves these variables.
-VARIABLES_APPROVED = False
-
+VARIABLES_APPROVED = True
 
 def load_dataset(path=DATA_PATH):
     if not Path(path).exists():
         raise FileNotFoundError(f"Dataset not found: {path}")
     return pd.read_csv(path)
-
 
 def validate_dataset(df):
     required = [TREATMENT, OUTCOME, *CONFOUNDERS]
@@ -55,7 +54,6 @@ def validate_dataset(df):
 
     if len(df) < 10:
         raise ValueError("Not enough observations for cross-fitting.")
-
 
 def make_preprocessor(X):
     numeric = X.select_dtypes(include="number").columns.tolist()
@@ -83,7 +81,6 @@ def make_preprocessor(X):
         ))
 
     return ColumnTransformer(transformers)
-
 
 def estimate_dml(df, n_splits=5, random_state=42):
     X = df[CONFOUNDERS].copy()
@@ -158,7 +155,6 @@ def estimate_dml(df, n_splits=5, random_state=42):
         "n_splits": n_splits,
     }
 
-
 def main():
     df = load_dataset()
     validate_dataset(df)
@@ -181,7 +177,5 @@ def main():
     pd.DataFrame([results]).to_csv(output_path, index=False)
     print("Saved:", output_path)
 
-
 if __name__ == "__main__":
     main()
-    

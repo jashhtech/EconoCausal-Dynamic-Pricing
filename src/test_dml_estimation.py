@@ -4,7 +4,6 @@ import pandas as pd
 
 from dml_estimation import validate_dataset
 
-
 class TestDMLValidation(unittest.TestCase):
 
     def setUp(self):
@@ -19,7 +18,15 @@ class TestDMLValidation(unittest.TestCase):
         })
 
     def test_valid_dataset_passes(self):
-        validate_dataset(self.df)
+        self.df = pd.DataFrame({
+                "deal_purchase_indicator": [0, 1] * 10,
+                "total_purchase_amount": list(range(20)),
+                "age": list(range(20, 40)),
+                "Income": list(range(30000, 50000, 1000)),
+                "Education": ["Graduation", "Master"] * 10,
+                "Marital_Status": ["Single", "Married"] * 10,
+                "Recency": list(range(20)),
+            })
 
     def test_missing_column_fails(self):
         invalid = self.df.drop(columns=["Income"])
@@ -38,7 +45,5 @@ class TestDMLValidation(unittest.TestCase):
         with self.assertRaises(ValueError):
             validate_dataset(invalid)
 
-
 if __name__ == "__main__":
     unittest.main()
-

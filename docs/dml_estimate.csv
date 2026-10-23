@@ -1,0 +1,2 @@
+estimate,standard_error,ci_lower_95,ci_upper_95,n_observations,n_splits
+-5.304546279658225,93.84057239078541,-189.2320681655976,178.6229756062812,2237,5
