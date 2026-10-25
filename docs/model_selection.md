@@ -35,6 +35,6 @@ still candidates and must be confirmed with Jaswanth and Sekhar.
 
 ## Limitations
 - Roles of the columns are not yet confirmed by the team.
-- Earlier rows suggested campaign_exposure may have very few 1 values and
-  campaign_response may equal Response. Both still need to be checked.
+- Data checks are in `data_check_findings.md`. campaign_exposure has 462 ones and 1775 zeros, so the treatment is imbalanced but usable.
+- campaign_response and Response are identical in all rows, so Response must not be used as a feature.
 - LightGBM was not tried yet.
