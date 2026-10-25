@@ -252,3 +252,63 @@ Synthetic validation demonstrates performance on simulated data only. It is not 
 
 DML does not guarantee causal conclusions by itself. Reliable interpretation requires valid treatment and outcome definitions, suitable confounder adjustment, adequate treatment overlap, and defensible causal assumptions.
 
+
+
+## 9. Team Integration and Sensitivity Analysis — October 25, 2026
+
+### Nuisance Model Integration
+
+Integrated `src/nuisance_models.py` from teammate Vridhi's branch (`vridhi-gautam`, commit `47d888b`).
+
+The nuisance models use five-fold cross-fitting to estimate treatment and outcome probabilities.
+
+Selected models and evaluation results:
+
+| Target | Selected model | AUC | Log loss |
+|---|---|---:|---:|
+| campaign_response | Gradient Boosting | 0.8161 | 0.3375 |
+| campaign_exposure | Random Forest | 0.7745 | 0.4166 |
+
+The `dml_residuals()` function provides cross-fitted outcome and treatment residuals. These were integrated with `estimate_dml_from_residuals()` in `src/dml_estimation.py`.
+
+### Exploratory DML Results
+
+| Configuration | Coefficient | Standard error | Approximate 95% CI |
+|---|---:|---:|---|
+| Including purchase totals | 0.2361 | 0.0243 | 0.1885–0.2838 |
+| Excluding purchase totals | 0.2725 | 0.0236 | 0.2263–0.3187 |
+
+Both analyses used 2,237 customer records.
+
+Removing `total_purchase_amount` and `total_purchases` increased the coefficient by approximately 0.0364. These variables may contain post-treatment information, so their inclusion requires confirmation of measurement timing.
+
+### Propensity-Score Sensitivity
+
+Using the feature configuration without purchase totals:
+
+- Without clipping: 0.2725
+- With clipping to [0.01, 0.99]: 0.2725
+- Predictions requiring clipping: 0
+
+Clipping did not affect this configuration. This does not establish sufficient treatment overlap.
+
+### Validation
+
+Four automated tests passed, including the new test for residual-based estimation.
+
+### Interpretation and Limitations
+
+These results describe exploratory associations after residual-based adjustment. They are not validated causal effects of discounts.
+
+The treatment variable `campaign_exposure` is derived from campaign acceptance indicators rather than a verified discount-assignment variable. The outcome `campaign_response` records campaign response rather than a confirmed post-discount purchase outcome.
+
+The estimated standard errors and confidence intervals are approximate and require further validation before inferential claims.
+
+The current estimator reports an average coefficient, not individualized customer treatment effects.
+
+### Integration Status
+
+The nuisance-model integration, residual-based estimation, initial model evaluation, feature-sensitivity analysis, propensity-clipping check, and automated testing have been completed locally.
+
+Final Git commit and push remain pending.
+

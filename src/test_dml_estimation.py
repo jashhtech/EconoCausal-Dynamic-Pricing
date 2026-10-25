@@ -51,5 +51,30 @@ class TestDMLEstimation(unittest.TestCase):
             )
 
 
+    def test_residual_integration(self):
+        from src.dml_estimation import estimate_dml_from_residuals
+
+        import numpy as np
+        import pandas as pd
+
+        rng = np.random.default_rng(42)
+        n = 1000
+
+        t_residual = pd.Series(rng.normal(0, 1, n))
+        y_residual = pd.Series(
+            3 * t_residual + rng.normal(0, 0.1, n)
+        )
+
+        result = estimate_dml_from_residuals(
+            y_residual, t_residual
+        )
+
+        self.assertAlmostEqual(result.effect, 3.0, delta=0.1)
+        self.assertGreater(result.standard_error, 0)
+        self.assertLess(result.ci_lower, result.ci_upper)
+        self.assertEqual(result.sample_size, n)
+
+
+
 if __name__ == "__main__":
     unittest.main()

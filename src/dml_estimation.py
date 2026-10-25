@@ -241,6 +241,56 @@ def estimate_dml(
     )
 
 
+def estimate_dml_from_residuals(y_residual, t_residual):
+    """Estimate an exploratory DML coefficient from cross-fitted residuals.
+
+    Both residual vectors must be produced out of fold using the same
+    observations and row order.
+    """
+    import numpy as np
+
+    y = np.asarray(y_residual, dtype=float).reshape(-1)
+    t = np.asarray(t_residual, dtype=float).reshape(-1)
+
+    if len(y) != len(t):
+        raise ValueError("Residual lengths must match.")
+
+    if len(y) < 10:
+        raise ValueError("At least 10 observations are required.")
+
+    if not np.isfinite(y).all() or not np.isfinite(t).all():
+        raise ValueError("Residuals must contain only finite values.")
+
+    denominator = np.dot(t, t)
+
+    if denominator <= 1e-12:
+        raise ValueError("Insufficient residual treatment variation.")
+
+    effect = float(np.dot(t, y) / denominator)
+    errors = y - effect * t
+
+    n = len(y)
+
+    # HC1-style robust standard error for the residual-on-residual
+    # coefficient with no intercept.
+    variance = (
+        n / (n - 1)
+        * np.sum((t * errors) ** 2)
+        / denominator**2
+    )
+
+    standard_error = float(np.sqrt(variance))
+
+    return DMLResult(
+        effect=effect,
+        standard_error=standard_error,
+        ci_lower=effect - 1.96 * standard_error,
+        ci_upper=effect + 1.96 * standard_error,
+        sample_size=n,
+    )
+
+
+
 if __name__ == "__main__":
     print("EconoCausal DML integration module")
     print("Waiting for confirmed treatment, outcome, and confounder definitions.")
