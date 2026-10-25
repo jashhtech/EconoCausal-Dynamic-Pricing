@@ -37,8 +37,26 @@ The column is almost constant (about 98% ones), so it carries very little inform
 Rule of thumb: |SMD| > 0.1 means the groups are imbalanced.
 Only age and Recency are balanced. The rest differ a lot between exposed and not exposed customers.
 
+## 5. Overlap (propensity scores)
+Cross-fitted Random Forest propensity scores for campaign_exposure:
+
+| Statistic | Value |
+|-----------|-------|
+| count | 2237 |
+| mean | 0.2083 |
+| std | 0.1802 |
+| min | 0.0088 |
+| 25% | 0.0779 |
+| median | 0.1448 |
+| 75% | 0.2750 |
+| max | 0.8901 |
+
+- No score is exactly 0 or 1, so every customer has some chance of being exposed or not exposed.
+- The mean (0.208) matches the exposed share (20.7%).
+- Scores are skewed low and the minimum is below 0.01, so overlap is thin at the low end. Effect estimates for those customers may be unstable. Plan: clip propensity scores to [0.01, 0.99] and check that results do not change much.
+
 ## Implications
 - A naive comparison of exposed vs not exposed would be biased, because exposed customers spend more, earn more and have fewer kids at home.
 - This supports using Double ML to adjust for confounders.
-- Strong imbalance can mean weak overlap, so propensity scores should be checked for extreme values before trusting the causal estimate.
+- Overlap was checked in section 5: acceptable, but thin at the low end of the propensity scores.
 - Treatment and outcome roles are still to be confirmed with Jaswanth.
