@@ -25,8 +25,9 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 DATA_PATH = Path(__file__).resolve().parent.parent / "data" / "retail_data.csv"
 TREATMENT = "campaign_exposure"
 OUTCOME = "campaign_response"
-NUMERIC = ["age", "Income", "Kidhome", "Teenhome", "Recency",
-           "total_purchase_amount", "total_purchases"]
+# total_purchase_amount and total_purchases are excluded until their timing
+# (before or after campaign exposure) is confirmed by the team.
+NUMERIC = ["age", "Income", "Kidhome", "Teenhome", "Recency"]
 CATEGORICAL = ["Education", "Marital_Status"]
 # Ye columns kabhi features mein nahi aane chahiye (leakage)
 LEAKAGE_COLUMNS = ["Response", "AcceptedCmp1", "AcceptedCmp2", "AcceptedCmp3",
