@@ -1,7 +1,15 @@
+from pathlib import Path
 import pandas as pd
 
+# Define file paths relative to this script
+DATA_DIR = Path(__file__).resolve().parent
+INPUT_FILE = DATA_DIR / "marketing_campaign.csv"
+OUTPUT_FILE = DATA_DIR / "retail_data.csv"
+
 # Step 1: Load dataset
-df = pd.read_csv("marketing_campaign.csv", sep="\t")
+df = pd.read_csv(INPUT_FILE, sep="\t")
+
+print("Original shape:", df.shape)
 
 # Step 2: Remove duplicates
 df = df.drop_duplicates()
@@ -10,7 +18,7 @@ df = df.drop_duplicates()
 df["Income"] = df["Income"].fillna(df["Income"].median())
 
 # Step 4: Remove unrealistic birth years
-df = df[df["Year_Birth"] >= 1940]
+df = df[df["Year_Birth"] >= 1940].copy()
 
 # Step 5: Create age
 df["age"] = 2025 - df["Year_Birth"]
@@ -55,7 +63,6 @@ campaign_columns = [
     "AcceptedCmp3",
     "AcceptedCmp4",
     "AcceptedCmp5"
-    
 ]
 
 df["campaign_exposure"] = (
@@ -66,11 +73,13 @@ df["campaign_exposure"] = (
 df["campaign_response"] = df["Response"]
 
 # Step 12: Final validation
+print("\n--- Data Quality Report ---")
 print("Missing values:", df.isnull().sum().sum())
 print("Duplicate rows:", df.duplicated().sum())
 print("Final shape:", df.shape)
 
 # Step 13: Save cleaned dataset
-df.to_csv("retail_data.csv", index=False)
+df.to_csv(OUTPUT_FILE, index=False)
 
-print("Cleaned dataset saved as retail_data.csv")
+print(f"Cleaned dataset saved to: {OUTPUT_FILE}")
+
