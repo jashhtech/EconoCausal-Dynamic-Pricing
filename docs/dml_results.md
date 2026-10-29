@@ -312,3 +312,35 @@ The nuisance-model integration, residual-based estimation, initial model evaluat
 
 Final Git commit and push remain pending.
 
+
+## Final Exploratory Analysis Configuration
+
+Treatment (T): `campaign_exposure`
+- Defined as acceptance of at least one historical campaign.
+- This is not verified discount assignment.
+
+Outcome (Y): `campaign_response`
+- Defined using the `Response` column.
+
+Confounders (X):
+- `age`
+- `Income`
+- `Kidhome`
+- `Teenhome`
+- `Recency`
+- `Education`
+- `Marital_Status`
+
+The purchase totals were excluded from the primary specification
+because their timing relative to historical campaigns cannot
+be established from the available data.
+
+The reduced-feature DML coefficient was approximately 0.2725,
+compared with 0.2361 when purchase totals were included.
+
+These results describe exploratory adjusted associations.
+They should not be interpreted as validated causal effects
+of discounts or used to recommend specific discount amounts.
+
+The existing dataset does not contain verified discount
+assignment or discount amount information.
