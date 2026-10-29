@@ -1,0 +1,7 @@
+target,model,auc,log_loss
+campaign_response,logistic,0.7489,0.3726
+campaign_response,random_forest,0.778,0.3538
+campaign_response,grad_boosting,0.7718,0.3576
+campaign_exposure,logistic,0.7148,0.4699
+campaign_exposure,random_forest,0.7264,0.4456
+campaign_exposure,grad_boosting,0.7238,0.4484

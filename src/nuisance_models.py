@@ -35,7 +35,7 @@ LEAKAGE_COLUMNS = ["Response", "AcceptedCmp1", "AcceptedCmp2", "AcceptedCmp3",
 SEED = 42
 N_SPLITS = 5
 # ===========================================================================
-
+RESULTS_PATH = Path(__file__).resolve().parent.parent / "results" / "nuisance_model_results.csv"
 
 def check_config():
     """Galat column features mein ho to turant error do."""
@@ -81,7 +81,7 @@ def evaluate(df, target):
     return rows
 
 
-def dml_residuals(df, outcome_model="grad_boosting", treatment_model="random_forest"):
+def dml_residuals(df, outcome_model="random_forest", treatment_model="random_forest"):
     """DML ke liye residuals: (Y - Y_hat, T - T_hat), dono cross-fitted."""
     y_hat = oof_predict(df, OUTCOME, candidate_models()[outcome_model])
     t_hat = oof_predict(df, TREATMENT, candidate_models()[treatment_model])
@@ -91,9 +91,10 @@ def dml_residuals(df, outcome_model="grad_boosting", treatment_model="random_for
 if __name__ == "__main__":
     check_config()
     df = pd.read_csv(DATA_PATH)
-    results = evaluate(df, OUTCOME) + evaluate(df, TREATMENT)
-    print(pd.DataFrame(results).to_string(index=False))
-
+    results_df = pd.DataFrame(evaluate(df, OUTCOME) + evaluate(df, TREATMENT))
+    print(results_df.to_string(index=False))
+    RESULTS_PATH.parent.mkdir(exist_ok=True)
+    results_df.to_csv(RESULTS_PATH, index=False)
     # Overlap check: propensity scores 0 ya 1 ke bahut paas to nahi
     t_hat = oof_predict(df, TREATMENT, candidate_models()["random_forest"])
     print("\nPropensity score (random_forest) summary:")
