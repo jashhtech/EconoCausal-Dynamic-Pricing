@@ -3,14 +3,19 @@ import pandas as pd
 from feature_engineering import load_and_prepare_features
 from feature_preprocessing import preprocess_features
 from feature_split import split_features
+from feature_validation import (
+    validate_features,
+    validate_treatment_outcome,
+)
 
 
 def build_feature_pipeline(X, T, Y):
     """
-    Preprocess features and split X, T, and Y
+    Preprocess features, validate data, and split X, T, and Y
     while preserving row alignment.
     """
 
+    # Validate input types
     if not isinstance(X, pd.DataFrame):
         raise TypeError("X must be a pandas DataFrame.")
 
@@ -20,14 +25,22 @@ def build_feature_pipeline(X, T, Y):
     if not isinstance(Y, (pd.Series, pd.DataFrame)):
         raise TypeError("Y must be a pandas Series or DataFrame.")
 
+    # Validate non-empty inputs
     if X.empty or T.empty or Y.empty:
         raise ValueError("X, T, and Y cannot be empty.")
 
-    if not (len(X) == len(T) == len(Y)):
-        raise ValueError("X, T, and Y must have equal rows.")
+    # Validate original features and row alignment
+    validate_features(X)
+    validate_treatment_outcome(X, T, Y)
 
+    # Preprocess features
     X_processed = preprocess_features(X)
 
+    # Validate processed features
+    validate_features(X_processed)
+    validate_treatment_outcome(X_processed, T, Y)
+
+    # Split features, treatment, and outcome
     (
         X_train,
         X_test,
@@ -37,7 +50,16 @@ def build_feature_pipeline(X, T, Y):
         Y_test,
     ) = split_features(X_processed, T, Y)
 
-    print("\nFeature pipeline executed successfully.")
+    # Validate training data
+    validate_features(X_train)
+    validate_treatment_outcome(X_train, T_train, Y_train)
+
+    # Validate testing data
+    validate_features(X_test)
+    validate_treatment_outcome(X_test, T_test, Y_test)
+
+    print("\nFeature validation completed successfully.")
+    print("Feature pipeline executed successfully.")
     print("Training features:", X_train.shape)
     print("Testing features:", X_test.shape)
     print("Training treatment:", T_train.shape)
