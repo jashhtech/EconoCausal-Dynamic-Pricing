@@ -45,3 +45,16 @@
 ### Testing
 - Feature pipeline tests executed successfully.
 - All 5 test cases passed.
+
+## Day 4: Feature Validation Edge Case Testing
+
+### Work Completed
+- Tested duplicate feature columns.
+- Tested infinite values in the feature matrix.
+- Tested non-numeric feature values.
+- Tested valid numeric feature data.
+- Verified feature validation error handling.
+
+### Testing
+- Added 4 edge case test cases.
+- Test execution: Pending.
