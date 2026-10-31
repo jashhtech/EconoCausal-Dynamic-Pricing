@@ -310,7 +310,8 @@ The current estimator reports an average coefficient, not individualized custome
 
 The nuisance-model integration, residual-based estimation, initial model evaluation, feature-sensitivity analysis, propensity-clipping check, and automated testing have been completed locally.
 
-Final Git commit and push remain pending.
+The initial DML integration was committed and pushed to the
+hepsiba branch. Further Week 3 configuration updates are in progress.
 
 
 ## Final Exploratory Analysis Configuration
@@ -344,3 +345,87 @@ of discounts or used to recommend specific discount amounts.
 
 The existing dataset does not contain verified discount
 assignment or discount amount information.
+
+
+
+## Week 3 Update — Nuisance Model Evaluation
+
+### Exploratory Feature Configuration
+
+Treatment (T): `campaign_exposure`
+
+Outcome (Y): `campaign_response`
+
+Numeric confounders:
+- `age`
+- `Income`
+- `Kidhome`
+- `Teenhome`
+- `Recency`
+
+Categorical confounders:
+- `Education`
+- `Marital_Status`
+
+The purchase-total variables `total_purchase_amount` and
+`total_purchases` were excluded because their measurement timing
+relative to campaign exposure has not been confirmed.
+
+### Nuisance Model Evaluation
+
+The updated nuisance-model pipeline was executed using
+2,237 customer records and five-fold cross-validation.
+
+| Target | Model | AUC | Log loss |
+|---|---|---:|---:|
+| campaign_response | Logistic Regression | 0.7489 | 0.3726 |
+| campaign_response | Random Forest | 0.7780 | 0.3538 |
+| campaign_response | Gradient Boosting | 0.7718 | 0.3576 |
+| campaign_exposure | Logistic Regression | 0.7148 | 0.4699 |
+| campaign_exposure | Random Forest | 0.7264 | 0.4456 |
+| campaign_exposure | Gradient Boosting | 0.7238 | 0.4484 |
+
+Random Forest achieved the highest AUC and lowest log loss
+among the tested models for both targets.
+
+### Propensity Score Summary
+
+Using the Random Forest treatment model:
+
+| Statistic | Value |
+|---|---:|
+| Count | 2,237 |
+| Mean | 0.2081 |
+| Standard deviation | 0.1586 |
+| Minimum | 0.0130 |
+| 25th percentile | 0.0995 |
+| Median | 0.1574 |
+| 75th percentile | 0.2540 |
+| Maximum | 0.7895 |
+
+These summary statistics do not independently establish
+adequate treatment overlap.
+
+### Automated Testing
+
+The following test modules were executed:
+
+- `src/test_dml_estimation.py`
+- `src/test_dml_synthetic.py`
+
+Result: 4 tests passed.
+
+### Interpretation and Limitations
+
+These nuisance-model metrics describe predictive performance
+for the selected exploratory treatment and outcome variables.
+
+They do not establish that historical campaign acceptance
+represents randomized discount assignment or that campaign
+response is a confirmed post-treatment purchasing outcome.
+
+The results must not be interpreted as validated causal
+discount effects.
+
+Final variable definitions, timing, treatment overlap,
+and end-to-end integration require further team validation.
