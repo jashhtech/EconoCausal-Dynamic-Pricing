@@ -14,12 +14,17 @@ from pathlib import Path
 
 import pandas as pd
 from sklearn.compose import ColumnTransformer
-from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
+from sklearn.ensemble import (
+    GradientBoostingClassifier,
+    RandomForestClassifier,
+)
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import log_loss, roc_auc_score
 from sklearn.model_selection import StratifiedKFold, cross_val_predict
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
+
+from dml_estimation import estimate_dml_from_residuals
 
 
 # ======================= CONFIGURATION =======================
@@ -78,7 +83,9 @@ def check_config():
         )
 
     if len(features) != len(set(features)):
-        raise ValueError("Duplicate columns found in feature configuration.")
+        raise ValueError(
+            "Duplicate columns found in feature configuration."
+        )
 
 
 def load_data():
@@ -89,11 +96,7 @@ def load_data():
 
     df = pd.read_csv(DATA_PATH)
 
-    required_columns = (
-        NUMERIC
-        + CATEGORICAL
-        + [TREATMENT, OUTCOME]
-    )
+    required_columns = NUMERIC + CATEGORICAL + [TREATMENT, OUTCOME]
 
     missing = [
         column for column in required_columns
@@ -110,6 +113,12 @@ def load_data():
             "Missing values found in required columns. "
             "Handle them before model evaluation."
         )
+
+    for target in [TREATMENT, OUTCOME]:
+        if set(df[target].unique()) != {0, 1}:
+            raise ValueError(
+                f"{target} must contain only binary values 0 and 1."
+            )
 
     return df
 
@@ -182,7 +191,7 @@ def oof_predict(df, target, model):
         method="predict_proba",
     )[:, 1]
 
-    return predictions
+    return pd.Series(predictions, index=df.index)
 
 
 def evaluate(df, target):
@@ -215,7 +224,7 @@ def evaluate(df, target):
 
 def dml_residuals(
     df,
-    outcome_model="grad_boosting",
+    outcome_model="random_forest",
     treatment_model="random_forest",
 ):
     """
@@ -243,10 +252,11 @@ def dml_residuals(
     return y_residual, t_residual
 
 
+# ======================= MAIN EXECUTION =======================
+
 if __name__ == "__main__":
 
     check_config()
-
     df = load_data()
 
     print("Dataset loaded successfully.")
@@ -257,6 +267,7 @@ if __name__ == "__main__":
     print("Numeric confounders:", NUMERIC)
     print("Categorical confounders:", CATEGORICAL)
 
+    # Evaluate nuisance models
     print("\nEvaluating nuisance models...")
 
     results = (
@@ -269,20 +280,51 @@ if __name__ == "__main__":
         pd.DataFrame(results).to_string(index=False)
     )
 
-    # Propensity-score summary
+    # Generate cross-fitted residuals
+    print("\nGenerating cross-fitted residuals...")
+
+    y_residual, t_residual = dml_residuals(
+        df,
+        outcome_model="random_forest",
+        treatment_model="random_forest",
+    )
+
+    # Integrate residuals with DML estimator
+    print("\nRunning DML estimation...")
+
+    result = estimate_dml_from_residuals(
+        y_residual,
+        t_residual,
+    )
+
+    print("\nDML ESTIMATION RESULTS")
+    print("----------------------")
+    print(f"Estimated coefficient: {result.effect:.4f}")
+    print(f"Standard error: {result.standard_error:.4f}")
+    print(
+        f"95% confidence interval: "
+        f"[{result.ci_lower:.4f}, {result.ci_upper:.4f}]"
+    )
+    print(f"Sample size: {result.sample_size}")
+
+    # Propensity-score diagnostics
+    print("\nPropensity score summary:")
+
     t_hat = oof_predict(
         df,
         TREATMENT,
         candidate_models()["random_forest"],
     )
 
-    print("\nPropensity score summary:")
     print(
-        pd.Series(t_hat).describe().round(4)
+        t_hat.describe().round(4)
     )
 
-    print("\nNuisance model evaluation completed.")
+    print("\nDML integration completed.")
+
     print(
-        "Note: These results are exploratory, "
-        "not proof of causal effects."
+        "\nIMPORTANT: The treatment represents historical campaign "
+        "exposure, not an assigned discount amount. The estimate is "
+        "exploratory and must not be interpreted as a verified causal "
+        "discount effect."
     )
