@@ -19,3 +19,19 @@
 - Treatment: Pending team confirmation
 - Outcome: Pending team confirmation
 - Confounders: Pending team confirmation
+
+## Day 2: Categorical Feature Encoding
+
+### Objective
+Convert categorical features into numerical format.
+
+### Work Completed
+- Identified categorical columns.
+- Implemented One-Hot Encoding.
+- Preserved numerical features.
+- Checked encoded feature dimensions.
+- Verified missing values after encoding.
+
+### Testing
+- Encoding execution: Pending
+- Missing value verification: Pending
