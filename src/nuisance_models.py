@@ -2,15 +2,17 @@
 """
 EconoCausal - Nuisance Models
 Week 3: DML Integration and Evaluation
+Week 4: Treatment Overlap Diagnostics
 
 Outcome model   : Y ~ X
 Treatment model : T ~ X
 
-This is an exploratory configuration.
-Final treatment, outcome and confounders require team confirmation.
+Exploratory configuration. Historical campaign exposure is not
+an assigned discount amount.
 """
 
 from pathlib import Path
+import matplotlib.pyplot as plt
 
 import pandas as pd
 from sklearn.compose import ColumnTransformer
@@ -35,11 +37,9 @@ DATA_PATH = (
     / "retail_data.csv"
 )
 
-# Exploratory treatment and outcome
 TREATMENT = "campaign_exposure"
 OUTCOME = "campaign_response"
 
-# Provisional pre-treatment confounders
 NUMERIC = [
     "age",
     "Income",
@@ -53,7 +53,6 @@ CATEGORICAL = [
     "Marital_Status",
 ]
 
-# These columns must never be used as confounders
 LEAKAGE_COLUMNS = [
     "Response",
     "AcceptedCmp1",
@@ -65,6 +64,10 @@ LEAKAGE_COLUMNS = [
 
 SEED = 42
 N_SPLITS = 5
+
+# Diagnostic thresholds, not automatic exclusion rules
+LOW_PROPENSITY = 0.05
+HIGH_PROPENSITY = 0.95
 
 # =============================================================
 
@@ -124,7 +127,7 @@ def load_data():
 
 
 def make_preprocessor():
-    """Create preprocessing pipeline for numeric and categorical features."""
+    """Create preprocessing pipeline."""
 
     return ColumnTransformer([
         ("num", StandardScaler(), NUMERIC),
@@ -202,11 +205,7 @@ def evaluate(df, target):
 
     for name, model in candidate_models().items():
 
-        predictions = oof_predict(
-            df,
-            target,
-            model,
-        )
+        predictions = oof_predict(df, target, model)
 
         rows.append({
             "target": target,
@@ -227,12 +226,7 @@ def dml_residuals(
     outcome_model="random_forest",
     treatment_model="random_forest",
 ):
-    """
-    Generate cross-fitted DML residuals.
-
-    Y residual = actual outcome - predicted outcome
-    T residual = actual treatment - predicted treatment
-    """
+    """Generate cross-fitted DML residuals."""
 
     y_hat = oof_predict(
         df,
@@ -250,6 +244,147 @@ def dml_residuals(
     t_residual = df[TREATMENT] - t_hat
 
     return y_residual, t_residual
+
+
+def treatment_overlap_analysis(df, t_hat):
+    """
+    Examine propensity-score distributions and common support
+    for treated and control observations.
+    """
+
+    treated = t_hat[df[TREATMENT] == 1]
+    control = t_hat[df[TREATMENT] == 0]
+
+    print("\nTREATMENT OVERLAP ANALYSIS")
+    print("==========================")
+
+    print("\nTreated group propensity scores:")
+    print(treated.describe().round(4))
+
+    print("\nControl group propensity scores:")
+    print(control.describe().round(4))
+
+    if treated.empty or control.empty:
+        print("\nWARNING: One treatment group is empty.")
+        return
+
+    # Range shared by both groups
+    overlap_lower = max(treated.min(), control.min())
+    overlap_upper = min(treated.max(), control.max())
+
+    print("\nCommon support range:")
+    print(f"Lower bound: {overlap_lower:.4f}")
+    print(f"Upper bound: {overlap_upper:.4f}")
+
+    if overlap_lower >= overlap_upper:
+        print("WARNING: No common support detected.")
+        return
+
+    print("Common support exists.")
+
+    # Extreme propensity scores
+    print("\nExtreme Propensity Score Check")
+    print("--------------------------------")
+
+    low_count = (t_hat < LOW_PROPENSITY).sum()
+    high_count = (t_hat > HIGH_PROPENSITY).sum()
+
+    central_count = (
+        (t_hat >= LOW_PROPENSITY)
+        & (t_hat <= HIGH_PROPENSITY)
+    ).sum()
+
+    print(f"Scores below {LOW_PROPENSITY}: {low_count}")
+    print(f"Scores above {HIGH_PROPENSITY}: {high_count}")
+    print(
+        f"Scores between {LOW_PROPENSITY} and "
+        f"{HIGH_PROPENSITY}: {central_count}"
+    )
+
+    # Common support coverage
+    in_common_support = (
+        (t_hat >= overlap_lower)
+        & (t_hat <= overlap_upper)
+    )
+
+    overlap_count = in_common_support.sum()
+    overlap_percentage = overlap_count / len(t_hat) * 100
+
+    print("\nCommon Support Coverage")
+    print("-----------------------")
+
+    print(f"Customers in common support: {overlap_count}")
+    print(f"Common support coverage: {overlap_percentage:.2f}%")
+
+    # Coverage by treatment group
+    treated_inside = (
+        (treated >= overlap_lower)
+        & (treated <= overlap_upper)
+    ).sum()
+
+    control_inside = (
+        (control >= overlap_lower)
+        & (control <= overlap_upper)
+    ).sum()
+
+    print("\nCoverage by Treatment Group")
+    print("---------------------------")
+
+    print(
+        f"Treated inside support: {treated_inside}/{len(treated)} "
+        f"({treated_inside / len(treated) * 100:.2f}%)"
+    )
+
+    print(
+        f"Control inside support: {control_inside}/{len(control)} "
+        f"({control_inside / len(control) * 100:.2f}%)"
+    )
+
+    print(
+        "\nNote: Shared min-max ranges do not prove adequate "
+        "distributional overlap. Further diagnostics are needed."
+    )
+
+
+def plot_propensity_overlap(df, t_hat):
+    """Plot propensity-score distributions for treated and control groups."""
+
+    plt.figure(figsize=(10, 6))
+
+    plt.hist(
+        t_hat[df[TREATMENT] == 1],
+        bins=25,
+        alpha=0.6,
+        density=True,
+        label="Treated",
+    )
+
+    plt.hist(
+        t_hat[df[TREATMENT] == 0],
+        bins=25,
+        alpha=0.6,
+        density=True,
+        label="Control",
+    )
+
+    plt.xlabel("Propensity Score")
+    plt.ylabel("Density")
+    plt.title("Propensity Score Overlap: Treated vs Control")
+    plt.legend()
+    plt.grid(alpha=0.3)
+
+    output_dir = (
+        Path(__file__).resolve().parent.parent / "graphs"
+    )
+    output_dir.mkdir(exist_ok=True)
+
+    output_path = output_dir / "propensity_score_overlap.png"
+
+    plt.savefig(output_path, dpi=300, bbox_inches="tight")
+    plt.show()
+    plt.close()
+
+    print(f"\nOverlap plot saved to: {output_path}")
 
 
 # ======================= MAIN EXECUTION =======================
@@ -276,9 +411,7 @@ if __name__ == "__main__":
     )
 
     print("\nModel evaluation results:")
-    print(
-        pd.DataFrame(results).to_string(index=False)
-    )
+    print(pd.DataFrame(results).to_string(index=False))
 
     # Generate cross-fitted residuals
     print("\nGenerating cross-fitted residuals...")
@@ -288,8 +421,53 @@ if __name__ == "__main__":
         outcome_model="random_forest",
         treatment_model="random_forest",
     )
+    
+def run_sensitivity_analysis(df):
+    """Compare DML estimates across nuisance-model configurations."""
 
-    # Integrate residuals with DML estimator
+    models = [
+        "logistic",
+        "random_forest",
+        "grad_boosting",
+    ]
+
+    rows = []
+
+    print("\nDML SENSITIVITY ANALYSIS")
+    print("========================")
+
+    for model_name in models:
+
+        print(f"\nEvaluating: {model_name}")
+
+        y_residual, t_residual = dml_residuals(
+            df,
+            outcome_model=model_name,
+            treatment_model=model_name,
+        )
+
+        result = estimate_dml_from_residuals(
+            y_residual,
+            t_residual,
+        )
+
+        rows.append({
+            "model": model_name,
+            "effect": result.effect,
+            "standard_error": result.standard_error,
+            "ci_lower": result.ci_lower,
+            "ci_upper": result.ci_upper,
+        })
+
+    results_df = pd.DataFrame(rows)
+
+    print("\nSensitivity Analysis Results:")
+    print(results_df.round(4).to_string(index=False))
+
+    return results_df
+
+
+    # DML estimation
     print("\nRunning DML estimation...")
 
     result = estimate_dml_from_residuals(
@@ -306,6 +484,7 @@ if __name__ == "__main__":
         f"[{result.ci_lower:.4f}, {result.ci_upper:.4f}]"
     )
     print(f"Sample size: {result.sample_size}")
+    sensitivity_results = run_sensitivity_analysis(df)
 
     # Propensity-score diagnostics
     print("\nPropensity score summary:")
@@ -316,9 +495,11 @@ if __name__ == "__main__":
         candidate_models()["random_forest"],
     )
 
-    print(
-        t_hat.describe().round(4)
-    )
+    print(t_hat.describe().round(4))
+
+    # Week 4 overlap diagnostics
+    treatment_overlap_analysis(df, t_hat)
+    plot_propensity_overlap(df, t_hat)
 
     print("\nDML integration completed.")
 
