@@ -1,0 +1,33 @@
+check_name,status,details
+Dataset is not empty,PASS,"Rows: 2237, Columns: 35"
+Missing values,PASS,Total missing values: 0
+Duplicate rows,PASS,Total duplicate rows: 0
+Required feature: age,PASS,Column exists
+Required feature: total_purchase_amount,PASS,Column exists
+Required feature: total_purchases,PASS,Column exists
+Required feature: deal_purchase_indicator,PASS,Column exists
+Required feature: campaign_exposure,PASS,Column exists
+Required feature: campaign_response,PASS,Column exists
+Binary values: AcceptedCmp1,PASS,"Found values: [np.int64(0), np.int64(1)]"
+Binary values: AcceptedCmp2,PASS,"Found values: [np.int64(0), np.int64(1)]"
+Binary values: AcceptedCmp3,PASS,"Found values: [np.int64(0), np.int64(1)]"
+Binary values: AcceptedCmp4,PASS,"Found values: [np.int64(0), np.int64(1)]"
+Binary values: AcceptedCmp5,PASS,"Found values: [np.int64(0), np.int64(1)]"
+Binary values: Response,PASS,"Found values: [np.int64(0), np.int64(1)]"
+Binary values: deal_purchase_indicator,PASS,"Found values: [np.int64(0), np.int64(1)]"
+Binary values: campaign_exposure,PASS,"Found values: [np.int64(0), np.int64(1)]"
+Binary values: campaign_response,PASS,"Found values: [np.int64(0), np.int64(1)]"
+Non-negative values: Income,PASS,All values are numeric and non-negative
+Non-negative values: NumDealsPurchases,PASS,All values are numeric and non-negative
+Non-negative values: NumWebPurchases,PASS,All values are numeric and non-negative
+Non-negative values: NumCatalogPurchases,PASS,All values are numeric and non-negative
+Non-negative values: NumStorePurchases,PASS,All values are numeric and non-negative
+Non-negative values: MntWines,PASS,All values are numeric and non-negative
+Non-negative values: MntFruits,PASS,All values are numeric and non-negative
+Non-negative values: MntMeatProducts,PASS,All values are numeric and non-negative
+Non-negative values: MntFishProducts,PASS,All values are numeric and non-negative
+Non-negative values: MntSweetProducts,PASS,All values are numeric and non-negative
+Non-negative values: MntGoldProds,PASS,All values are numeric and non-negative
+Non-negative values: total_purchase_amount,PASS,All values are numeric and non-negative
+Non-negative values: total_purchases,PASS,All values are numeric and non-negative
+Age calculation,PASS,age should equal 2025 - Year_Birth
