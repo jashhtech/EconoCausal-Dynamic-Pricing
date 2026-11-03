@@ -5,14 +5,16 @@ import BudgetInput from './components/BudgetInput'
 
 import CsvUpload from './components/CsvUpload'
 const REQUIRED_COLUMNS = [
-  'customer_id',
-  'age',
-  'past_spend',
-  'visits_per_month',
-  'tenure_months',
-  'region',
-  'discount_given',
-  'purchased',
+   "ID",
+  "age",
+  "Income",
+  "Kidhome",
+  "Teenhome",
+  "Recency",
+  "Education",
+  "Marital_Status",
+  "campaign_exposure",
+  "campaign_response",
 ]
 
 function App() {
