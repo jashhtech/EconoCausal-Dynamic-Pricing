@@ -387,10 +387,49 @@ def plot_propensity_overlap(df, t_hat):
     print(f"\nOverlap plot saved to: {output_path}")
 
 
+def run_sensitivity_analysis(df):
+    """Compare DML estimates across nuisance-model configurations.
+
+    Each configuration uses the same model family for the outcome and
+    treatment nuisance models. Estimates are exploratory and depend on
+    the chosen feature set and historical campaign variables.
+    """
+
+    models = ["logistic", "random_forest", "grad_boosting"]
+    rows = []
+
+    print("\nDML SENSITIVITY ANALYSIS")
+    print("========================")
+
+    for model_name in models:
+        print(f"\nEvaluating: {model_name}")
+
+        y_residual, t_residual = dml_residuals(
+            df,
+            outcome_model=model_name,
+            treatment_model=model_name,
+        )
+
+        result = estimate_dml_from_residuals(y_residual, t_residual)
+
+        rows.append({
+            "model": model_name,
+            "effect": result.effect,
+            "standard_error": result.standard_error,
+            "ci_lower": result.ci_lower,
+            "ci_upper": result.ci_upper,
+            "sample_size": result.sample_size,
+        })
+
+    results_df = pd.DataFrame(rows)
+    print("\nSensitivity Analysis Results:")
+    print(results_df.round(4).to_string(index=False))
+    return results_df
+
+
 # ======================= MAIN EXECUTION =======================
 
 if __name__ == "__main__":
-
     check_config()
     df = load_data()
 
@@ -404,76 +443,18 @@ if __name__ == "__main__":
 
     # Evaluate nuisance models
     print("\nEvaluating nuisance models...")
-
-    results = (
-        evaluate(df, OUTCOME)
-        + evaluate(df, TREATMENT)
-    )
-
+    results = evaluate(df, OUTCOME) + evaluate(df, TREATMENT)
     print("\nModel evaluation results:")
     print(pd.DataFrame(results).to_string(index=False))
 
-    # Generate cross-fitted residuals
-    print("\nGenerating cross-fitted residuals...")
-
+    # Main DML estimate using the selected random-forest configuration
+    print("\nRunning DML estimation...")
     y_residual, t_residual = dml_residuals(
         df,
         outcome_model="random_forest",
         treatment_model="random_forest",
     )
-    
-def run_sensitivity_analysis(df):
-    """Compare DML estimates across nuisance-model configurations."""
-
-    models = [
-        "logistic",
-        "random_forest",
-        "grad_boosting",
-    ]
-
-    rows = []
-
-    print("\nDML SENSITIVITY ANALYSIS")
-    print("========================")
-
-    for model_name in models:
-
-        print(f"\nEvaluating: {model_name}")
-
-        y_residual, t_residual = dml_residuals(
-            df,
-            outcome_model=model_name,
-            treatment_model=model_name,
-        )
-
-        result = estimate_dml_from_residuals(
-            y_residual,
-            t_residual,
-        )
-
-        rows.append({
-            "model": model_name,
-            "effect": result.effect,
-            "standard_error": result.standard_error,
-            "ci_lower": result.ci_lower,
-            "ci_upper": result.ci_upper,
-        })
-
-    results_df = pd.DataFrame(rows)
-
-    print("\nSensitivity Analysis Results:")
-    print(results_df.round(4).to_string(index=False))
-
-    return results_df
-
-
-    # DML estimation
-    print("\nRunning DML estimation...")
-
-    result = estimate_dml_from_residuals(
-        y_residual,
-        t_residual,
-    )
+    result = estimate_dml_from_residuals(y_residual, t_residual)
 
     print("\nDML ESTIMATION RESULTS")
     print("----------------------")
@@ -484,17 +465,17 @@ def run_sensitivity_analysis(df):
         f"[{result.ci_lower:.4f}, {result.ci_upper:.4f}]"
     )
     print(f"Sample size: {result.sample_size}")
+
+    # Compare estimates across nuisance-model configurations
     sensitivity_results = run_sensitivity_analysis(df)
 
-    # Propensity-score diagnostics
+    # Propensity-score diagnostics using the random-forest treatment model
     print("\nPropensity score summary:")
-
     t_hat = oof_predict(
         df,
         TREATMENT,
         candidate_models()["random_forest"],
     )
-
     print(t_hat.describe().round(4))
 
     # Week 4 overlap diagnostics
@@ -502,7 +483,6 @@ def run_sensitivity_analysis(df):
     plot_propensity_overlap(df, t_hat)
 
     print("\nDML integration completed.")
-
     print(
         "\nIMPORTANT: The treatment represents historical campaign "
         "exposure, not an assigned discount amount. The estimate is "
