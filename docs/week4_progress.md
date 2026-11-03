@@ -35,3 +35,18 @@ Convert categorical features into numerical format.
 ### Testing
 - Encoding execution: Pending
 - Missing value verification: Pending
+
+## Day 3: Categorical Encoding Testing
+
+### Objective
+Test the categorical encoding module.
+
+### Work Completed
+- Created automated encoding tests.
+- Verified categorical columns are converted into numerical features.
+- Checked numerical feature preservation.
+- Verified row alignment.
+- Checked missing values after encoding.
+
+### Testing
+- Categorical encoding tests: Pending
