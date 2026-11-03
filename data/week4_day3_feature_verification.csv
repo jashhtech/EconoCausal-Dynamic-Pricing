@@ -1,0 +1,7 @@
+feature,status,details
+age,PASS,Compared age with 2025 - Year_Birth
+total_purchase_amount,PASS,Compared with the sum of six spending columns
+total_purchases,PASS,"Compared with web, catalog and store purchases"
+deal_purchase_indicator,PASS,1 indicates at least one deal purchase; otherwise 0
+campaign_exposure,PASS,1 indicates acceptance of at least one of five campaigns
+campaign_response,PASS,Compared with original Response column
