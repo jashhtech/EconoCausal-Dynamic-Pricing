@@ -1,0 +1,9 @@
+variable,proposed_role,description,available_in_dataset,missing_values,unique_values
+campaign_exposure,Candidate Treatment,Indicates acceptance of at least one of five campaigns.,Yes,0,2
+campaign_response,Candidate Outcome,Customer response copied from the original Response column.,Yes,0,2
+Income,Candidate Confounder,Customer income.,Yes,0,1972
+age,Candidate Confounder,Customer age.,Yes,0,56
+Kidhome,Candidate Confounder,Number of children at home.,Yes,0,3
+Teenhome,Candidate Confounder,Number of teenagers at home.,Yes,0,3
+Recency,Candidate Confounder,Days since the customer's last purchase.,Yes,0,100
+NumWebVisitsMonth,Candidate Confounder,Number of website visits per month.,Yes,0,16
