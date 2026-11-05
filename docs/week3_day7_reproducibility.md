@@ -89,30 +89,17 @@ Output generated:
 \## 3. Output Consistency Review
 
 
-
 The generated nuisance prediction CSV was compared with the previously committed version.
 
+Both CSV files contained 2,237 rows and 6 columns, with identical column names.
 
+The comparison showed:
+- Treatment (`T`) and outcome (`Y`) columns were exactly identical.
+- Small floating-point differences were observed in the prediction and residual columns.
+- The maximum absolute difference was approximately 5.0e-16.
+- A tolerance-based comparison using an absolute tolerance of 1e-12 and relative tolerance of 0 passed.
 
-Small floating-point differences were observed in some decimal values. These differences were limited to numerical precision in the displayed examples.
+Therefore, the old and newly generated prediction outputs are numerically equivalent within the selected tolerance. The small differences are consistent with floating-point precision variation and do not indicate a meaningful change in predictions.
 
-
-
-The prediction CSV was not included in the Day 7 commit because the differences had not been fully investigated.
-
-
-
-\## 4. Git Verification
-
-
-
-The Week 3 Day 5 and Day 6 work was committed and pushed successfully.
-
-
-
-Commit:
-
-
-
-`2
+The previously committed prediction CSV was retained to avoid an unnecessary output-only change.
 
