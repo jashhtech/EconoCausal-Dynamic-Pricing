@@ -204,3 +204,51 @@ Common support (range where both groups have customers): 0.0201 to 0.7525.
 
 &#x20; columns are valid confounders; both are still open.
 
+
+
+
+## Day 5: Robustness checks
+
+Script: `python src/robustness_check.py` (results in `results/robustness_check.csv`).
+Each specification cross-fits the nuisance models and estimates the effect of
+campaign_exposure on campaign_response by regressing the outcome residual on the
+treatment residual, with a heteroskedasticity-robust standard error. This is a
+simple partialling-out check that uses our own nuisance models. It is not the
+estimate in `src/dml_estimation.py` (Hepsiba) and it is not a validated causal
+effect.
+
+| Specification | n | Estimate | Std error | 95% CI |
+|---|---|---|---|---|
+| 1 Baseline (Random Forest, final features) | 2237 | 0.2835 | 0.0234 | 0.2376 to 0.3293 |
+| 2 Trim propensity [0.05, 0.95] | 2121 | 0.2837 | 0.0237 | 0.2373 to 0.3301 |
+| 3 Trim propensity [0.10, 0.90] | 1670 | 0.2795 | 0.0250 | 0.2305 to 0.3285 |
+| 4 With purchase columns | 2237 | 0.2473 | 0.0243 | 0.1996 to 0.2949 |
+| 5 Gradient Boosting nuisance models | 2237 | 0.2672 | 0.0235 | 0.2211 to 0.3132 |
+| 6 Logistic nuisance models | 2237 | 0.2943 | 0.0230 | 0.2492 to 0.3395 |
+
+### Findings
+- Across the six specifications the estimate stays between 0.247 and 0.294 and
+  is positive in all of them. All confidence intervals overlap and none includes
+  zero.
+- Trimming the propensity scores has almost no effect (0.2835 to 0.2837 and
+  0.2795), so the thin lower tail found in Day 4 is not driving the estimate.
+- Changing the nuisance model moves the estimate by about 0.01 (Gradient
+  Boosting 0.2672, Logistic 0.2943).
+- The largest change comes from adding the purchase columns back: the estimate
+  falls by about 0.036, which is more than one standard error (0.023). The
+  estimate therefore depends on whether these columns are valid pre-treatment
+  confounders, which is still not confirmed.
+- Hepsiba's DML estimates show the same direction: 0.2725 without and 0.2361 with
+  the purchase columns, also a drop of about 0.036. The levels differ slightly
+  from this check (0.2835 and 0.2473), which uses a different implementation.
+
+### Limitations
+- This check does not show robustness to unmeasured confounding. All
+  specifications use the same measured confounders.
+- An effect of about 0.28 on a response rate of 0.149 is large. The definition of
+  campaign_exposure should be checked with Sekhar, because a treatment that is
+  closely related to the outcome would inflate the estimate.
+- The estimates are not validated causal effects. Refutation tests have not been
+  run.
+- Standard errors assume independent customers and a single cross-fitting split.
+
