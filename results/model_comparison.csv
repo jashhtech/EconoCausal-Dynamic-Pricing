@@ -1,0 +1,19 @@
+target,model,auc,log_loss
+campaign_response,logistic (baseline),0.7489,0.3726
+campaign_response,random_forest (current),0.778,0.3538
+campaign_response,grad_boosting (current),0.7718,0.3576
+campaign_response,random_forest depth5,0.7699,0.3623
+campaign_response,random_forest depth10,0.7809,0.3521
+campaign_response,random_forest leaf10,0.7754,0.3565
+campaign_response,grad_boosting depth2,0.7741,0.3559
+campaign_response,lightgbm,0.7661,0.3655
+campaign_response,lightgbm small,0.7725,0.3577
+campaign_exposure,logistic (baseline),0.7148,0.4699
+campaign_exposure,random_forest (current),0.7264,0.4456
+campaign_exposure,grad_boosting (current),0.7238,0.4484
+campaign_exposure,random_forest depth5,0.7236,0.4478
+campaign_exposure,random_forest depth10,0.727,0.4456
+campaign_exposure,random_forest leaf10,0.7241,0.4479
+campaign_exposure,grad_boosting depth2,0.7272,0.4437
+campaign_exposure,lightgbm,0.7113,0.4685
+campaign_exposure,lightgbm small,0.7244,0.4522
