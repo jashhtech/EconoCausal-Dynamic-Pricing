@@ -1,0 +1,23 @@
+category,item,status
+Project file,data/marketing_campaign.csv,AVAILABLE
+Project file,data/retail_data.csv,AVAILABLE
+Project file,data/prepare_dataset.py,AVAILABLE
+Project file,data/data_dictionary.csv,AVAILABLE
+Project file,data/data_quality_report.csv,AVAILABLE
+Project file,data/week4_day1_audit_report.csv,AVAILABLE
+Project file,data/week4_day2_quality_checks.csv,AVAILABLE
+Project file,data/week4_day3_feature_verification.csv,AVAILABLE
+Project file,data/week4_day4_variable_summary.csv,AVAILABLE
+Project file,data/week4_day5_reproducibility_report.csv,AVAILABLE
+Project file,src/dml_estimation.py,AVAILABLE
+Project file,docs/dml_results.md,AVAILABLE
+Project file,README.md,AVAILABLE
+Dataset validation,Dataset is not empty,PASS
+Dataset validation,No missing values,PASS
+Dataset validation,No duplicate rows,PASS
+Dataset validation,Feature available: age,PASS
+Dataset validation,Feature available: total_purchase_amount,PASS
+Dataset validation,Feature available: total_purchases,PASS
+Dataset validation,Feature available: deal_purchase_indicator,PASS
+Dataset validation,Feature available: campaign_exposure,PASS
+Dataset validation,Feature available: campaign_response,PASS
