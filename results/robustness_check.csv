@@ -1,0 +1,7 @@
+specification,n,estimate,std_error,ci_low,ci_high
+"1 baseline (RF, final features)",2237,0.2835,0.0234,0.2376,0.3293
+"2 trim propensity [0.05, 0.95]",2121,0.2837,0.0237,0.2373,0.3301
+"3 trim propensity [0.10, 0.90]",1670,0.2795,0.025,0.2305,0.3285
+4 with purchase columns,2237,0.2473,0.0243,0.1996,0.2949
+5 gradient boosting nuisance models,2237,0.2672,0.0235,0.2211,0.3132
+6 logistic nuisance models,2237,0.2943,0.023,0.2492,0.3395
