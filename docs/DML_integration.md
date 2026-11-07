@@ -59,3 +59,37 @@ The current estimator returns an average treatment effect. It does not estimate 
 A causal interpretation also depends on defensible assumptions, appropriate confounder adjustment, and adequate treatment overlap.
 
 **Current status:** The estimator and synthetic tests are implemented. Real-data causal estimation remains pending confirmation of valid treatment and outcome variables.
+
+
+
+
+
+## Integration Testing and Validation
+
+### Feature Pipeline and DML Integration
+The feature pipeline has been integrated with the DML estimation module.
+
+The integration test verifies that:
+- The feature pipeline accepts X (confounders), T (treatment), and Y (outcome).
+- Training and testing datasets are generated successfully.
+- The training datasets can be passed to `estimate_dml()`.
+- The estimator returns a valid `DMLResult`.
+- The estimated effect, standard error, and confidence interval are finite and valid.
+
+### Test Results
+The complete automated test suite was executed using:
+
+```bash
+python -m pytest -v
+```
+
+**Result: 5 tests passed.**
+
+- Feature pipeline–DML integration: Passed
+- Minimum observation validation: Passed
+- Residual estimation: Passed
+- DML result validation: Passed
+- Synthetic treatment-effect recovery: Passed
+
+### Limitations
+The integration test uses synthetic data to verify software compatibility. It does not establish causal validity on the real retail dataset. Treatment, outcome, and confounder definitions must be confirmed before interpreting real-world causal estimates.
