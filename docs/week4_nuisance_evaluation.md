@@ -252,3 +252,35 @@ effect.
   run.
 - Standard errors assume independent customers and a single cross-fitting split.
 
+
+## Update: definition of the treatment (confirmed by Sekhar)
+
+- `campaign_exposure` is derived from `AcceptedCmp1` to `AcceptedCmp5`: it is 1 if
+  the customer accepted at least one of those campaigns, otherwise 0.
+- `campaign_response` is copied from the original `Response` column.
+- The dataset has no timestamps, so it cannot establish whether
+  `total_purchase_amount` and `total_purchases` were measured before or after the
+  treatment (see `docs/week4_data_audit.md` on branch `sekhar`).
+
+### What this means for the results
+- The treatment describes past campaign acceptance, not an exposure or discount
+  that was assigned to customers. A customer who accepted earlier campaigns is
+  likely to be generally responsive to offers, and this responsiveness is not
+  among the measured confounders (age, income, children, recency, education,
+  marital status).
+- The estimates of 0.25 to 0.29 in the robustness check should therefore be read
+  as the adjusted association between earlier acceptance and the latest response.
+  They should not be read as the effect of showing a discount, and they are not
+  validated causal effects.
+- The nuisance models and the leakage guard are unaffected: `AcceptedCmp1-5` are
+  already excluded from the features, so the treatment is not predicted from its
+  own components.
+
+### Recommendations
+- Describe `campaign_exposure` in the final report as "prior campaign acceptance".
+- Keep the purchase columns out of the confounder set until their timing is
+  established.
+- For a real pricing question, a treatment that records an assigned discount
+  (for example a discount indicator with a known time) would be needed. Discuss
+  with the mentor whether such a variable exists in the dataset.
+
