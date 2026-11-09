@@ -284,3 +284,18 @@ effect.
   (for example a discount indicator with a known time) would be needed. Discuss
   with the mentor whether such a variable exists in the dataset.
 
+
+## Day 7: Final Summary, Conclusions, and Recommendations
+
+### Summary of Nuisance Model Evaluation
+Over Week 4, the nuisance models (Treatment: `campaign_exposure`, Outcome: `campaign_response`) were rigorously evaluated to validate their suitability for Double Machine Learning estimation.
+1. **Model Selection:** The Random Forest configuration (`n_estimators=200`, `min_samples_leaf=5`) remained the preferred model. It consistently outperformed Logistic Regression and Gradient Boosting (with ±0.003 AUC difference).
+2. **Propensity Overlap & Positivity:** The propensity scores show strong common support across both treated and untreated groups. Positivity is not violated, although a thin lower tail exists.
+3. **Robustness:** Simple partialling-out checks confirmed that the effect estimate is stable across different nuisance models and is unaffected by propensity trimming at [0.05, 0.95].
+
+### Recommendations for DML Estimation
+1. **Reporting the Estimate:** Explicitly label the DML result as an "adjusted association between prior campaign acceptance and current campaign response", rather than a randomized causal effect.
+2. **Trimming:** Since trimming the sample at [0.05, 0.95] barely moves the estimate, proceed with reporting the full-sample DML estimate as the primary result to maintain statistical power.
+3. **Feature Set:** Continue to exclude the purchase columns (`total_purchase_amount`, `total_purchases`) from the primary DML confounder set, as their post-treatment status cannot be ruled out. Use them strictly as a sensitivity check.
+4. **Visual Evidence:** Reference the evaluation plots generated in `results/` (`auc_comparison.png`, `propensity_overlap.png`, `robustness_forest_plot.png`) in the final project report.
+
