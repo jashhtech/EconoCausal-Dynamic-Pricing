@@ -49,8 +49,68 @@ The Week 4 implementation includes:
 
 The implementation was executed successfully, and the changes were checked using `git diff --check`.
 
-## 6. Conclusion
+## 6. Additional Work: Propensity-Score Trimming and DML Robustness Analysis
 
-Week 4 strengthened the DML implementation through sensitivity analysis and propensity score diagnostics. The results provide additional information about model stability and treatment-control overlap.
+Following the initial Week 4 diagnostics, additional robustness analysis was performed to examine whether the DML treatment-effect estimates remained stable after restricting observations based on propensity scores.
 
-**Limitation:** The available treatment variable represents historical campaign exposure, not a randomly assigned discount amount. Therefore, the estimated treatment effects should be interpreted as exploratory adjusted associations rather than proven causal effects of specific discount amounts.
+Three samples were evaluated:
+
+- Full sample: 2,237 customers.
+- Propensity scores between 0.05 and 0.95: 2,121 customers.
+- Propensity scores between 0.10 and 0.90: 1,670 customers.
+
+All three sample sizes matched the counts from the team's overlap analysis.
+
+Two feature specifications were compared:
+
+- **Without purchase columns:** Used the original demographic and customer-related features.
+- **With purchase columns:** Additionally included `total_purchase_amount` and `total_purchases`.
+
+### 6.1 DML Robustness Results
+
+| Sample | Without Purchase Columns | With Purchase Columns |
+|---|---:|---:|
+| Full sample (2,237) | 0.2835 | 0.2473 |
+| 0.05–0.95 (2,121) | 0.2829 | 0.2538 |
+| 0.10–0.90 (1,670) | 0.2745 | 0.2386 |
+
+### 6.2 95% Confidence Intervals
+
+| Sample | Without Purchase Columns | With Purchase Columns |
+|---|---|---|
+| Full sample | [0.2376, 0.3294] | [0.1996, 0.2950] |
+| 0.05–0.95 | [0.2362, 0.3296] | [0.2053, 0.3023] |
+| 0.10–0.90 | [0.2257, 0.3233] | [0.1878, 0.2893] |
+
+### 6.3 Observations
+
+- All six treatment-effect estimates were positive.
+- All six 95% confidence intervals excluded zero.
+- Estimates without purchase columns remained relatively stable across the three sample restrictions.
+- Including purchase-related features resulted in smaller estimates.
+- The results indicate stability across the examined propensity-score trimming thresholds.
+
+The analysis suggests that the estimated effects are not highly sensitive to the two trimming thresholds examined.
+
+**Additional limitation:** Purchase-related features may be post-treatment variables. Therefore, the specification without purchase columns is treated as the primary analysis, while the specification with purchase columns is used as a sensitivity comparison.
+
+## 7. Additional Implementation and GitHub Deliverables
+
+The additional robustness analysis was implemented using:
+
+- `src/trimmed_dml_analysis.py` – Script for propensity-score trimming and DML estimation.
+- `results/trimmed_dml_results.csv` – Stores the six DML estimation results.
+
+The changes were committed and pushed to the `hepsiba` branch.
+
+**Commit ID:** `a666127`
+
+**Commit Message:** Add DML propensity trimming robustness analysis.
+
+## 8. Conclusion
+
+Week 4 strengthened the DML implementation through nuisance-model sensitivity analysis, propensity-score overlap diagnostics, and additional robustness checks using trimmed samples.
+
+The treatment-effect estimates remained positive and relatively stable across the examined sample restrictions. The comparison of feature specifications also highlighted the influence of purchase-related variables on the estimated effects.
+
+**Overall limitation:** The available treatment variable represents historical campaign exposure, not a randomly assigned discount amount. Therefore, the estimated treatment effects should be interpreted as exploratory adjusted associations rather than proven causal effects of specific discount amounts.
